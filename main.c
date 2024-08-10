@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <string.h>
 #include "main.h"
 
 int table[7][7];
 int x,y,targetX,targetY;
+long int game_time;
 
 // Clear screen and display board
 void Display(int table[7][7]) {
-  system("clear"); // Efface le contenu du terminal
+  system("clear");  
   printf("\n  0   2   4   6\n");
   for (int i=0; i < 7; i++) {
     !(i%2) ? printf("%d ",i) : printf("  "); // display column indicators
@@ -25,7 +28,30 @@ void Display(int table[7][7]) {
 
 // Start game and initialize data
 void StartGame() {
-  printf("Welcome to my Peg Solitaire!\n");
+  printf("Welcome to my Peg Solitaire!\n"
+	 "Display the rules ? (y/n)\n");
+  char ans;
+  scanf("%s",&ans);
+  
+  if (!strcmp(&ans, "y")) {
+    system("clear");
+    printf("This is the Peg Solitaire\n\n"
+	   "The goal is simply to clear all marbles except one.\n"
+	   "It is possible to remove a marble by jumping over it with another one\n\n"
+	   "The game uses a coordinate system: \"x y\" is the marble on line x and column y\n\n"
+	   "For example, the selected marble is the 2 3\n"
+	   "  0   2   4   6\n"
+	   "0     ⬤ ⬤ ⬤    \n" 
+	   "    ⬤ ⬤ ⬤ ⬤ ⬤  \n" 
+	   "2 ⬤ ⬤ ⬤ ⨂ ⬤ ⬤ ⬤\n" 
+	   "  ⬤ ⬤ ⬤ ⬤ ⬤ ⬤ ⬤ \n"
+	   "4 ⬤ ⬤ ⬤ ⬤ ⬤ ⬤ ⬤ \n"
+	   "    ⬤ ⬤ ⬤ ⬤ ⬤   \n"
+	   "6     ⬤ ⬤ ⬤     \n\n"
+	   "One move is <x y a b>, where x y is the coordinate of the marble selected\nand a b is the coordinate of its destination.\n\n"
+	   "If you think that no more move is possible, enter -1 -1 and your score will display\n");
+    return;
+  }
   
   for (int i=0; i < 7; i++) {
     for (int j=0; j < 7; j++) {
@@ -53,6 +79,7 @@ void StartGame() {
 
 // Main game loop
 void GameLoop() {
+  game_time = time(NULL);
   while (x != -1 && y != -1 && MovePossible()) {
     printf("Please enter move :\n");
     scanf("%d %d", &x, &y);
@@ -82,7 +109,9 @@ void GameLoop() {
 
 // Score display
 void GameEnd() {
+  game_time = time(NULL) - game_time;
   printf("Game Over, Score : %d out of 37\n",37-Count());
+  printf("Duration: %d minutes %d seconds\n", game_time/60, game_time%60);
 }
 
 // Marble count
@@ -98,7 +127,7 @@ int Count() {
   return res;
 }
 
-//   Check move validity
+// Check move validity
 int MovePossible() {
   for (int i = 2; i < 5; i++) {
     for (int j = 2; j < 5; j++) {
