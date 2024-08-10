@@ -98,9 +98,88 @@ int Count() {
   return res;
 }
 
-// TODO Check move validity
+//   Check move validity
 int MovePossible() {
-  return 1;
+  for (int i = 2; i < 5; i++) {
+    for (int j = 2; j < 5; j++) {
+      if (table[i][j]) {
+	if (!table[i-2][j] && table[i-1][j] ||
+	    !table[i][j-2] && table[i][j-1] ||
+	    !table[i][j+2] && table[i][j+1] ||
+	    !table[i+2][j] && table[i+1][j]) {
+	  return 1;
+	}
+      }
+    }
+  }
+
+  for (int i = 0; i<2; i++) {
+    for (int j = 2; j < 5; j++) {
+      if (table[i][j]) {
+	if (!table[i][j-2] && table[i][j-1] ||
+	    !table[i][j+2] && table[i][j+1] ||
+	    !table[i+2][j] && table[i+1][j]) {
+	  return 1;
+	}
+      }
+      if (table[6-i][j]) {
+	if (!table[6-i-2][j] && table[6-i-1][j] ||
+	    !table[6-i][j-2] && table[6-i][j-1] ||
+	    !table[6-i][j+2] && table[6-i][j+1]) {
+	  return 1;
+	}
+      }
+    }
+  }
+  
+  for (int j = 0; j<2; j++) {
+    for (int i = 2; i < 5; i++) {
+      if (table[i][j]) {
+	if (!table[i-2][j] && table[i-1][j] ||
+	    !table[i+2][j] && table[i+1][j] ||
+	    !table[i][j+2] && table[i][j+1]) {
+	  return 1;
+	}
+      }
+      if (table[i][6-j]) {
+	if (!table[i][6-j-2] && table[i][6-j-1] ||
+	    !table[i-2][6-j] && table[i-1][6-j] ||
+	    !table[i+2][6-j] && table[i+1][6-j]) {
+	  return 1;
+	}
+      }
+    }
+  }
+
+  if (table[1][1]) {
+    if(table[1][2] && !table[1][3] ||
+       table[2][1] && !table[3][1]) {
+      return 1;
+    }
+  }
+
+  if (table[1][5]) {
+    if(table[1][4] && !table[1][3] ||
+       table[2][5] && !table[3][5]) {
+      return 1;
+    }
+  }
+
+  if (table[5][1]) {
+    if(table[5][2] && !table[5][3] ||
+       table[4][1] && !table[3][1]) {
+      return 1;
+    }
+  }
+  
+  if (table[5][5]) {
+    if(table[5][4] && !table[5][3] ||
+       table[4][5] && !table[3][5]) {
+      return 1;
+    }
+  }
+  printf("\n");
+  return 0;
 }
 
 int main() {
